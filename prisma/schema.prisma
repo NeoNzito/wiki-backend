@@ -15,6 +15,8 @@ model User {
   active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  communities Community[]
+  posts Post[]
 
   @@map("users")
 }
@@ -23,6 +25,8 @@ model Community {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String @unique
   description String
+  ownerId String @db.ObjectId
+  owner User @relation(fields: [ownerId], references: [id])
   posts Post[]
 }
 
@@ -35,16 +39,16 @@ model Post {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   communityId String @db.ObjectId
   community Community @relation(fields: [communityId], references: [id])
-  creatorId
-  creator
+  creatorId String @db.ObjectId
+  creator User @relation(fields: [creatorId], references: [id])
   content Content[]
   alterList AlterList[] 
 }
 
 model AlterList {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  postId
-  post
+  postId String @db.ObjectId
+  post Post @relation(fields: [postId], references: [id])
 }
 
 model Content {
