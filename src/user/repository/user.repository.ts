@@ -16,6 +16,38 @@ export class UserRepository {
                 username,
                 password
             }
+        });
+    }
+
+    async getOneById(id: string) {
+        return await this.prisma.user.findUnique({
+            where: {
+                id: id
+            },
+            select: {
+                id: true,
+                email: true,
+                username: true
+            }
+        });
+    }
+
+    async getOneByEmail(email: string) {
+        return await this.prisma.user.findUnique({
+            where: {
+                email: email
+            }
+        });
+    }
+
+    async disableUser(id: string) {
+        return await this.prisma.user.update({
+            where: {
+                id: id
+            },
+            data: {
+                active: false
+            }
         })
     }
 }

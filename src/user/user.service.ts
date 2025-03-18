@@ -19,4 +19,16 @@ export class UserService {
             console.log("Error: ", err);
         }
     }
+
+    async getOneById(id: string) {
+        return await this.userRepository.getOneById(id);
+    }
+
+    async getOneByEmail(email: string) {
+        return await this.userRepository.getOneByEmail(email);
+    }
+
+    async disableUser(id:string) {
+        return await this.userRepository.disableUser(id);
+    }
 }

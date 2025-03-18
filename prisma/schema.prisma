@@ -11,5 +11,45 @@ model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   email String @unique
   username String @unique
-  password String 
+  password String
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Community {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String @unique
+  description String
+  posts Post[]
+}
+
+enum ContentType {
+  Text
+  Video
+}
+
+model Post {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  communityId String @db.ObjectId
+  community Community @relation(fields: [communityId], references: [id])
+  creatorId
+  creator
+  content Content[]
+  alterList AlterList[] 
+}
+
+model AlterList {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  postId
+  post
+}
+
+model Content {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  type ContentType
+  postId String @db.ObjectId
+  post Post @relation(fields: [postId], references: [id])
 }
