@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { UserRepository } from "./repository/user.repository";
 import { CreateUserDTO } from "./dto/create-user.dto";
 
+
 const bcrypt = require("bcrypt");
 
 @Injectable()
