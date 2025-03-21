@@ -27,12 +27,6 @@ export class UserController {
         return await this.userService.getOneById(id);
     }
 
-    @Get("/auth/:email")
-    @Public()
-    async getOneByEmail(@Param("email") email: string) {
-        return await this.userService.getOneByEmail(email);
-    }
-
     @Post("/auth/:id")
     async disableUser(@Param("id") id: string) {
         return await this.userService.disableUser(id);
