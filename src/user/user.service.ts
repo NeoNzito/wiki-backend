@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { UserRepository } from "./repository/user.repository";
 import { CreateUserDTO } from "./dto/create-user.dto";
+import { EditUserDTO } from "./dto/edit-user.dto";
 
 
 const bcrypt = require("bcrypt");
@@ -27,6 +28,10 @@ export class UserService {
 
     async getOneByEmail(email: string) {
         return await this.userRepository.getOneByEmail(email);
+    }
+
+    async edit(id: string, user: EditUserDTO) {
+        return await this.userRepository.edit(id, user);
     }
 
     async disableUser(id:string) {

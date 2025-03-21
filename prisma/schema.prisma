@@ -27,6 +27,8 @@ model Community {
   description String
   ownerId String @db.ObjectId
   owner User @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   posts Post[]
 }
 
@@ -41,6 +43,8 @@ model Post {
   community Community @relation(fields: [communityId], references: [id])
   creatorId String @db.ObjectId
   creator User @relation(fields: [creatorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   content Content[]
   alterList AlterList[] 
 }
@@ -49,6 +53,8 @@ model AlterList {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   postId String @db.ObjectId
   post Post @relation(fields: [postId], references: [id])
+  content String
+  createdAt DateTime @default(now())
 }
 
 model Content {
@@ -56,4 +62,16 @@ model Content {
   type ContentType
   postId String @db.ObjectId
   post Post @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+  postId String
+  parentId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  childIds String[]
 }

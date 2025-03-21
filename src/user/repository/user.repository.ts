@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import UserEntity from "../entity/user.entity";
+import { EditUserDTO } from "../dto/edit-user.dto";
 
 
 @Injectable()
@@ -38,6 +39,10 @@ export class UserRepository {
                 email: email
             }
         });
+    }
+
+    async edit(id: string, user: EditUserDTO) {
+        
     }
 
     async disableUser(id: string) {
