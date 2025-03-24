@@ -15,7 +15,7 @@ model User {
   active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  communities Community[]
+  communities Community[] @relation("CommunityOwner")
   posts Post[]
 
   @@map("users")
@@ -26,10 +26,12 @@ model Community {
   title String @unique
   description String
   ownerId String @db.ObjectId
-  owner User @relation(fields: [ownerId], references: [id])
+  owner User @relation(fields: [ownerId], references: [id], name: "CommunityOwner")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts Post[]
+
+  @@map("communities")
 }
 
 enum ContentType {
