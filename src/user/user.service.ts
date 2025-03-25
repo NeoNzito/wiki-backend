@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { UserRepository } from "./repository/user.repository";
 import { CreateUserDTO } from "./dto/create-user.dto";
-import { EditUserDTO } from "./dto/edit-user.dto";
+import { UpdateUserDTO } from "./dto/update-user.dto";
 
 
 const bcrypt = require("bcrypt");
@@ -10,28 +10,28 @@ const bcrypt = require("bcrypt");
 export class UserService {
     constructor(private readonly userRepository: UserRepository) {}
 
-    async create(user: CreateUserDTO) {
+    async createUser(user: CreateUserDTO) {
         try {
 
             const hashedPassword = await bcrypt.hash(user.password, 10)
             user.password = hashedPassword;
-            return await this.userRepository.create(user);
+            return await this.userRepository.createUser(user);
             
         } catch (err) {
             console.log("Error: ", err);
         }
     }
 
-    async getOneById(id: string) {
-        return await this.userRepository.getOneById(id);
+    async getOneUserById(id: string) {
+        return await this.userRepository.getOneUserById(id);
     }
 
-    async getOneByEmail(email: string) {
-        return await this.userRepository.getOneByEmail(email);
+    async getOneUserByEmail(email: string) {
+        return await this.userRepository.getOneUserByEmail(email);
     }
 
-    async edit(id: string, user: EditUserDTO) {
-        return await this.userRepository.edit(id, user);
+    async updateUser(id: string, user: UpdateUserDTO) {
+        return await this.userRepository.updateUser(id, user);
     }
 
     async disableUser(id:string) {

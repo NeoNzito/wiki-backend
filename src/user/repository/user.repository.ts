@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import UserEntity from "../entity/user.entity";
-import { EditUserDTO } from "../dto/edit-user.dto";
+import { UpdateUserDTO } from "../dto/update-user.dto";
 
 
 @Injectable()
 export class UserRepository {
     constructor(private readonly prisma: PrismaService) {}
 
-    async create(user: UserEntity) {
+    async createUser(user: UserEntity) {
         const { username, email, password } = user;
 
         return await this.prisma.user.create({
@@ -20,7 +20,7 @@ export class UserRepository {
         });
     }
 
-    async getOneById(id: string) {
+    async getOneUserById(id: string) {
         return await this.prisma.user.findUnique({
             where: {
                 id: id
@@ -33,7 +33,7 @@ export class UserRepository {
         });
     }
 
-    async getOneByEmail(email: string) {
+    async getOneUserByEmail(email: string) {
         return await this.prisma.user.findUnique({
             where: {
                 email: email
@@ -41,8 +41,15 @@ export class UserRepository {
         });
     }
 
-    async edit(id: string, user: EditUserDTO) {
-        
+    async updateUser(id: string, user: UpdateUserDTO) {
+        return await this.prisma.user.update({
+            where: {
+                id: id
+            },
+            data: {
+                ...user
+            }
+        })
     }
 
     async disableUser(id: string) {

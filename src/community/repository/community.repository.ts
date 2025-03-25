@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateCommunityDTO } from "../dto/create-community.dto";
+import { UpdateCommunityDTO } from "../dto/update-community.dto";
 
 @Injectable()
 export class CommunityRepository {
@@ -32,5 +33,35 @@ export class CommunityRepository {
             page,
             totalPages: Math.ceil(total / limit)
         }
+    }
+
+    async getOneCommunityById(id: string) {
+        return await this.prisma.community.findUnique({
+            where: {
+                id: id
+            }
+        });
+    }
+
+    async updateCommunity(id: string, community: UpdateCommunityDTO) {
+        return await this.prisma.community.update({
+            where: {
+                id: id
+            }, 
+            data: {
+                ...community
+            }
+        })
+    }
+
+    async disableCommunity(id: string) {
+        return await this.prisma.community.update({
+            where: {
+                id: id
+            },
+            data: {
+                active: false
+            }
+        })
     }
 }

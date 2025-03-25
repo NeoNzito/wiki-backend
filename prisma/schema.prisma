@@ -16,7 +16,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   communities Community[] @relation("CommunityOwner")
-  posts Post[]
+  posts Post[] @relation("PostCreator")
 
   @@map("users")
 }
@@ -27,11 +27,26 @@ model Community {
   description String
   ownerId String @db.ObjectId
   owner User @relation(fields: [ownerId], references: [id], name: "CommunityOwner")
+  active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  posts Post[]
+  posts Post[] @relation("PostOwner")
 
   @@map("communities")
+}
+
+model Post {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  communityId String @db.ObjectId
+  community Community @relation(fields: [communityId], references: [id], name: "PostOwner")
+  creatorId String @db.ObjectId
+  creator User @relation(fields: [creatorId], references: [id], name: "PostCreator")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content Content[] @relation("ContentOwner")
+  alterList AlterList[] @relation("AlterListOwner")
+  
+  @@map("posts")
 }
 
 enum ContentType {
@@ -39,33 +54,16 @@ enum ContentType {
   Video
 }
 
-model Post {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  communityId String @db.ObjectId
-  community Community @relation(fields: [communityId], references: [id])
-  creatorId String @db.ObjectId
-  creator User @relation(fields: [creatorId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  content Content[]
-  alterList AlterList[] 
-}
-
-model AlterList {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  postId String @db.ObjectId
-  post Post @relation(fields: [postId], references: [id])
-  content String
-  createdAt DateTime @default(now())
-}
-
 model Content {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   type ContentType
+  content String
   postId String @db.ObjectId
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], name: "ContentOwner")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("contents")
 }
 
 model Comment {
@@ -75,5 +73,16 @@ model Comment {
   parentId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  childIds String[]
+
+  @@map("comments")
+}
+
+model AlterList {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  postId String @db.ObjectId
+  post Post @relation(fields: [postId], references: [id], name: "AlterListOwner")
+  content String
+  createdAt DateTime @default(now())
+
+  @@map("alterlists")
 }

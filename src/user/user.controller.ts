@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { Public } from "src/auth/decorator/public.decorator";
-import { EditUserDTO } from "./dto/edit-user.dto";
+import { UpdateUserDTO } from "./dto/update-user.dto";
 
 
 @Controller("user")
@@ -11,7 +11,7 @@ export class UserController {
 
     @Post()
     @Public()
-    async create(@Body() body: any) {
+    async createUser(@Body() body: any) {
         const { username, email, password } = body
         const user : CreateUserDTO = {
             username,
@@ -19,26 +19,26 @@ export class UserController {
             password
         }
 
-        return await this.userService.create(user);
+        return await this.userService.createUser(user);
     }
 
     @Get("/:id")
     @Public()
-    async getOneById(@Param("id") id: string) {
-        return await this.userService.getOneById(id);
+    async getOneUserById(@Param("id") id: string) {
+        return await this.userService.getOneUserById(id);
     }
 
     @Post("/edit/:id")
     async editUser(@Param("id") id: string, @Body() body : any) {
         const { username, password } = body
-        const user : EditUserDTO = {
+        const user : UpdateUserDTO = {
             username,
             password
         }
-        return await this.userService.edit(id, user);
+        return await this.userService.updateUser(id, user);
     }
 
-    @Post("/auth/:id")
+    @Post("/delete/:id")
     async disableUser(@Param("id") id: string) {
         return await this.userService.disableUser(id);
     }

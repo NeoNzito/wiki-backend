@@ -14,7 +14,7 @@ export class AuthService {
     ) {}
 
     async login(loginData: LoginDTO): Promise<{ access_token: string }> {
-        const user = await this.userService.getOneByEmail(loginData.email);
+        const user = await this.userService.getOneUserByEmail(loginData.email);
         if (!user) {
             throw new UnauthorizedException();
         }
