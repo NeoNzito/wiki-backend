@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
-import { UserModule } from "src/user/user.module";
+import { UserModule } from "src/ms-user/user.module";
 import { jwtConstants } from "./jwt/constants";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from './prisma/prisma.module';
-import { UserModule } from './user/user.module';
+import { UserModule } from './ms-user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { CommunityModule } from './community/community.module';
+import { CommunityModule } from './ms-community/community.module';
 
 @Module({
   imports: [

@@ -22,6 +22,10 @@ export class UserService {
         }
     }
 
+    async unsubscribeUser(userId: string, communityId: string) {
+        
+    }
+
     async getOneUserById(id: string) {
         return await this.userRepository.getOneUserById(id);
     }
