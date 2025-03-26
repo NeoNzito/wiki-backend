@@ -44,7 +44,6 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   content Content[] @relation("ContentOwner")
-  alterList AlterList[] @relation("AlterListOwner")
   
   @@map("posts")
 }
@@ -75,14 +74,4 @@ model Comment {
   updatedAt DateTime @updatedAt
 
   @@map("comments")
-}
-
-model AlterList {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  postId String @db.ObjectId
-  post Post @relation(fields: [postId], references: [id], name: "AlterListOwner")
-  content String
-  createdAt DateTime @default(now())
-
-  @@map("alterlists")
 }
