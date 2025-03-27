@@ -22,6 +22,15 @@ import { AuthService } from './auth/auth.service';
           queueOptions: { durable: false },
         }
       },
+      {
+        name: "MODERATION_SERVICE",
+        transport: Transport.RMQ,
+        options: {
+          urls: ["amqp://localhost:5672"],
+          queue: "moderation_queue",
+          queueOptions: { durable: false }
+        }
+      },
     ]),
   ],
   controllers: [],

@@ -8,6 +8,6 @@ export class EmailController {
 
     @MessagePattern("send_verification_email")
     async handleVerificationEmail(data: { email: string; token: string }) {
-
+        return await this.emailService.sendVerificationEmail(data.email, data.token);
     }
 }
