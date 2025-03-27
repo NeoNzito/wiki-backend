@@ -2,10 +2,14 @@ import { Body, Controller, Get, Param, Post, Request, UnauthorizedException } fr
 import { CreateCommunityDTO } from "./dto/create-community.dto";
 import { CommunityService } from "./community.service";
 import { UpdateCommunityDTO } from "./dto/update-community.dto";
+import { ClientProxy } from "@nestjs/microservices";
 
 @Controller("community")
 export class CommunityController {
-    constructor (private readonly communityService : CommunityService) {}
+    constructor(
+        private readonly communityService: CommunityService,
+        private readonly communityClient: ClientProxy
+    ) {}
 
     @Post()
     async createCommunity(@Request() req, @Body() body) {

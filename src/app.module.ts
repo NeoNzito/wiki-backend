@@ -10,7 +10,6 @@ import { AuthService } from './auth/auth.service';
   imports: [
     AuthModule,
     PrismaModule,
-    CommunityModule,
     ClientsModule.register([
       {
         name: "EMAIL_SERVICE",
@@ -47,6 +46,15 @@ import { AuthService } from './auth/auth.service';
           queue: "user_queue",
           queueOptions: { durable: false },
         },
+      },
+      {
+        name: "COMMUNITY_SERVICE",
+        transport: Transport.RMQ,
+        options: {
+          urls: ["amqp://localhost:5672"],
+          queue: "community_queue",
+          queueOptions: { durable: false }
+        }
       }
     ]),
   ],

@@ -1,10 +1,13 @@
 import { Controller } from "@nestjs/common";
 import { EmailService } from "./email.service";
-import { EventPattern, Payload } from "@nestjs/microservices";
+import { ClientProxy, EventPattern, Payload } from "@nestjs/microservices";
 
 @Controller("email")
 export class EmailController {
-    constructor(private readonly emailService: EmailService) {}
+    constructor(
+        private readonly emailService: EmailService,
+        private readonly emailClient: ClientProxy
+    ) {}
 
     @EventPattern("user.created")
     async handleVerificationEmail(@Payload() data: { email: string; token: string }) {
