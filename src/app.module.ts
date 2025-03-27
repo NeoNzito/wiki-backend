@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from './prisma/prisma.module';
-import { UserModule } from './ms-user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { CommunityModule } from './ms-community/community.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthService } from './auth/auth.service';
+
 
 @Module({
   imports: [
@@ -26,7 +25,7 @@ import { AuthService } from './auth/auth.service';
         options: {
           urls: ["amqp://localhost:5672"],
           queue: "moderation_queue",
-          queueOptions: { durable: false }
+          queueOptions: { durable: false },
         }
       },
       {
@@ -35,7 +34,7 @@ import { AuthService } from './auth/auth.service';
         options: {
           urls: ["amqp://localhost:5672"],
           queue: "notification_queue",
-          queueOptions: { durable: false }
+          queueOptions: { durable: false },
        }
       },
       {
@@ -53,7 +52,7 @@ import { AuthService } from './auth/auth.service';
         options: {
           urls: ["amqp://localhost:5672"],
           queue: "community_queue",
-          queueOptions: { durable: false }
+          queueOptions: { durable: false },
         }
       }
     ]),
