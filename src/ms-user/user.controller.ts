@@ -3,11 +3,15 @@ import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { Public } from "src/auth/decorator/public.decorator";
 import { UpdateUserDTO } from "./dto/update-user.dto";
+import { ClientProxy } from "@nestjs/microservices";
 
 
 @Controller("user")
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+    constructor(
+        private readonly userService: UserService,
+        private readonly userClient: ClientProxy
+    ) {}
 
     @Post()
     @Public()
@@ -19,7 +23,9 @@ export class UserController {
             password
         }
 
-        return await this.userService.createUser(user);
+        const res = await this.userService.createUser(user);
+        this.userClient.emit("user.created", res);
+        return { message: "User created succesfully" };
     }
 
     @Get("/:id")
