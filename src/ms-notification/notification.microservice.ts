@@ -8,6 +8,7 @@ async function bootstrap() {
         options: {
             urls: ["amqp://localhost:5672"],
             queue: "notification_queue",
+            queueOptions: { durable: false }
         }
     });
 
