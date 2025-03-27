@@ -1,11 +1,9 @@
-// LangChain Gemini
-
 import { NestFactory } from "@nestjs/core";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
-import { AppModule } from "src/app.module";
+import { ModerationModule } from "./moderation.module";
 
 async function bootstrap() {
-    const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+    const app = await NestFactory.createMicroservice<MicroserviceOptions>(ModerationModule, {
         transport: Transport.RMQ,
         options: {
             urls: ["amqp://localhost:5672"],
