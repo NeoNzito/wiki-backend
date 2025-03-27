@@ -14,7 +14,7 @@ import { AuthService } from './auth/auth.service';
         name: "EMAIL_SERVICE",
         transport: Transport.RMQ,
         options: {
-          urls: ["amqp://localhost:5672"],
+          urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
           queue: "email_queue",
           queueOptions: { durable: false },
         }
@@ -23,7 +23,7 @@ import { AuthService } from './auth/auth.service';
         name: "MODERATION_SERVICE",
         transport: Transport.RMQ,
         options: {
-          urls: ["amqp://localhost:5672"],
+          urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
           queue: "moderation_queue",
           queueOptions: { durable: false },
         }
@@ -32,7 +32,7 @@ import { AuthService } from './auth/auth.service';
         name: "NOTIFICATION_SERVICE",
         transport: Transport.RMQ,
         options: {
-          urls: ["amqp://localhost:5672"],
+          urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
           queue: "notification_queue",
           queueOptions: { durable: false },
        }
@@ -41,7 +41,7 @@ import { AuthService } from './auth/auth.service';
         name: "USER_SERVICE",
         transport: Transport.RMQ,
         options: {
-          urls: ["amqp://localhost:5672"],
+          urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
           queue: "user_queue",
           queueOptions: { durable: false },
         },
@@ -50,7 +50,7 @@ import { AuthService } from './auth/auth.service';
         name: "COMMUNITY_SERVICE",
         transport: Transport.RMQ,
         options: {
-          urls: ["amqp://localhost:5672"],
+          urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
           queue: "community_queue",
           queueOptions: { durable: false },
         }

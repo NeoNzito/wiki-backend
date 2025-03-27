@@ -22,4 +22,5 @@ export class EmailService {
 
         return await this.transporter.sendMail(mailOptions);
     }
+
 }
