@@ -17,6 +17,7 @@ model User {
   updatedAt DateTime @updatedAt
   communities Community[] @relation("CommunityOwner")
   posts Post[] @relation("PostCreator")
+  notifications Notification[] @relation("NotificationOwner")
 
   @@map("users")
 }
@@ -74,4 +75,17 @@ model Comment {
   updatedAt DateTime @updatedAt
 
   @@map("comments")
+}
+
+enum NotificationType {
+  Comment
+}
+
+model Notification {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  type NotificationType
+  timestamp DateTime @default(now())
+  message String
+  userId String @db.ObjectId
+  user User @relation(fields: [userId], references: [id], name: "NotificationOwner")
 }
