@@ -1,9 +1,7 @@
-enum NotificationType {
-    Comment
-}
+import { NotificationType } from "@prisma/client";
 
 export class NotificationDTO {
+    userId: string;
     type: NotificationType;
     message: string;
-    userId: string;
 }

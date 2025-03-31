@@ -78,7 +78,8 @@ model Comment {
 }
 
 enum NotificationType {
-  Comment
+  COMMENT
+  ALERT
 }
 
 model Notification {
