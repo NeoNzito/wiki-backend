@@ -8,44 +8,58 @@ datasource db {
 }
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  email String @unique
-  username String @unique
-  password String
-  active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  communities Community[] @relation("CommunityOwner")
-  posts Post[] @relation("PostCreator")
-  notifications Notification[] @relation("NotificationOwner")
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  email            String            @unique
+  username         String            @unique
+  password         String
+  active           Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  ownedCommunities Community[]       @relation("CommunityOwner")
+  memberships      CommunityMember[]
+  posts            Post[]            @relation("PostCreator")
+  notifications    Notification[]    @relation("NotificationOwner")
 
   @@map("users")
 }
 
 model Community {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  title String @unique
+  id          String            @id @default(auto()) @map("_id") @db.ObjectId
+  title       String            @unique
   description String
-  ownerId String @db.ObjectId
-  owner User @relation(fields: [ownerId], references: [id], name: "CommunityOwner")
-  active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  posts Post[] @relation("PostOwner")
+  ownerId     String            @db.ObjectId
+  owner       User              @relation(fields: [ownerId], references: [id], name: "CommunityOwner")
+  members     CommunityMember[]
+  active      Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  posts       Post[]            @relation("PostOwner")
 
   @@map("communities")
 }
 
+model CommunityMember {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @db.ObjectId
+  communityId String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id])
+  community   Community @relation(fields: [communityId], references: [id])
+  joinedAt    DateTime  @default(now())
+
+  @@unique([userId, communityId])
+  @@map("community_members")
+}
+
 model Post {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  communityId String @db.ObjectId
-  community Community @relation(fields: [communityId], references: [id], name: "PostOwner")
-  creatorId String @db.ObjectId
-  creator User @relation(fields: [creatorId], references: [id], name: "PostCreator")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  content Content[] @relation("ContentOwner")
-  
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  communityId String    @db.ObjectId
+  community   Community @relation(fields: [communityId], references: [id], name: "PostOwner")
+  creatorId   String    @db.ObjectId
+  creator     User      @relation(fields: [creatorId], references: [id], name: "PostCreator")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  content     Content[] @relation("ContentOwner")
+
   @@map("posts")
 }
 
@@ -55,22 +69,22 @@ enum ContentType {
 }
 
 model Content {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  type ContentType
-  content String
-  postId String @db.ObjectId
-  post Post @relation(fields: [postId], references: [id], name: "ContentOwner")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  type      ContentType
+  content   String
+  postId    String      @db.ObjectId
+  post      Post        @relation(fields: [postId], references: [id], name: "ContentOwner")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   @@map("contents")
 }
 
 model Comment {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  content String
-  postId String
-  parentId String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  postId    String
+  parentId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -83,10 +97,12 @@ enum NotificationType {
 }
 
 model Notification {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  type NotificationType
-  timestamp DateTime @default(now())
-  message String
-  userId String @db.ObjectId
-  user User @relation(fields: [userId], references: [id], name: "NotificationOwner")
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  type      NotificationType
+  timestamp DateTime         @default(now())
+  message   String
+  userId    String           @db.ObjectId
+  user      User             @relation(fields: [userId], references: [id], name: "NotificationOwner")
+
+  @@map("notifications")
 }
