@@ -17,3 +17,31 @@ services:
       - rabbitmq
     environment:
       RABBITMQ_URL: amqp://rabbitmq:5672
+  
+  community-service:
+    build: ./apps/community-service
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    
+  email-service:
+    build: ./apps/email-service
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+  
+  moderation-service:
+    build: ./apps/moderation-service
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+  
+  notification-service:
+    build: ./apps/notification-service
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672

@@ -1,13 +1,15 @@
 import { Controller } from "@nestjs/common";
 import { ModerationService } from "./moderation.service";
-import { ClientProxy } from "@nestjs/microservices";
+import { ClientProxy, MessagePattern } from "@nestjs/microservices";
 
 @Controller("moderation")
 export class ModerationController {
     constructor(
         private readonly moderationService: ModerationService,
-        private readonly moderationClient: ClientProxy
     ) {}
 
-    
+    @MessagePattern("moderate_text")
+    async moderateText(data: { content: string }) {
+        return await this.moderationService.moderateText(data.content);
+    }
 }

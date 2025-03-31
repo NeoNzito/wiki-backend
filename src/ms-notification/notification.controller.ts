@@ -7,7 +7,6 @@ import { NotificationDTO } from "./dto/notification.dto";
 export class NotificationController {
     constructor(
         private readonly notificationService: NotificationService,
-        private readonly notificationClient: ClientProxy
     ) {}
 
     @MessagePattern("new_comment")

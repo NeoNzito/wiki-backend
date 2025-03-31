@@ -11,6 +11,15 @@ import { AuthService } from './auth/auth.service';
     PrismaModule,
     ClientsModule.register([
       {
+        name: "COMMUNITY_SERVICE",
+        transport: Transport.RMQ,
+        options: {
+          urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
+          queue: "community_queue",
+          queueOptions: { durable: false },
+        }
+      },
+      {
         name: "EMAIL_SERVICE",
         transport: Transport.RMQ,
         options: {
@@ -35,7 +44,7 @@ import { AuthService } from './auth/auth.service';
           urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
           queue: "notification_queue",
           queueOptions: { durable: false },
-       }
+        }
       },
       {
         name: "USER_SERVICE",
@@ -46,15 +55,6 @@ import { AuthService } from './auth/auth.service';
           queueOptions: { durable: false },
         },
       },
-      {
-        name: "COMMUNITY_SERVICE",
-        transport: Transport.RMQ,
-        options: {
-          urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
-          queue: "community_queue",
-          queueOptions: { durable: false },
-        }
-      }
     ]),
   ],
   controllers: [],

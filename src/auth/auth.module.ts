@@ -6,18 +6,29 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { APP_GUARD } from "@nestjs/core";
 import { AuthGuard } from "./jwt/guard/auth.guard";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 
 
 @Module({
     imports: [
-        UserModule,
         JwtModule.register({
             global: true,
             secret: jwtConstants.secret,
             signOptions: {
                 expiresIn: jwtConstants.accessExpiresIn
             },
-        })
+        }),
+        ClientsModule.register([
+            {
+                name: "USER_SERVICE",
+                transport: Transport.RMQ,
+                options: {
+                    urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
+                    queue: "user_queue",
+                    queueOptions: { durable: false },
+                },
+            },
+        ])
     ],
     controllers: [AuthController],
     providers: [

@@ -3,7 +3,7 @@ import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { Public } from "src/auth/decorator/public.decorator";
 import { UpdateUserDTO } from "./dto/update-user.dto";
-import { ClientProxy } from "@nestjs/microservices";
+import { ClientProxy, MessagePattern } from "@nestjs/microservices";
 
 
 @Controller("user")
@@ -26,6 +26,11 @@ export class UserController {
         const res = await this.userService.createUser(user);
         this.userClient.emit("user.created", res);
         return { message: "User created succesfully" };
+    }
+
+    @MessagePattern("get_user_by_email")
+    async getUserByEmail(data : { email: string }) {
+        return await this.userService.getOneUserByEmail(data.email);
     }
 
     @Get("/:id")
