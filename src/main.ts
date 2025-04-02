@@ -2,9 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
+import { ApiGatewayModule } from './api-gateway/api-gateway.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(ApiGatewayModule);
   
   app.enableCors({
     origin: "http://localhost:3001"
@@ -17,10 +18,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true
     })
   )
-
-  useContainer(app.select(AppModule), { fallbackOnErrors: true })
-
-  await app.startAllMicroservices();
+  app.setGlobalPrefix('api');  
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

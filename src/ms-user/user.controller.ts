@@ -13,16 +13,8 @@ export class UserController {
         private readonly userClient: ClientProxy
     ) {}
 
-    @Post()
-    @Public()
-    async createUser(@Body() body: any) {
-        const { username, email, password } = body
-        const user : CreateUserDTO = {
-            username,
-            email,
-            password
-        }
-
+    @MessagePattern("create_user")
+    async createUser(user: CreateUserDTO) {
         const res = await this.userService.createUser(user);
         this.userClient.emit("user.created", res);
         return { message: "User created succesfully" };
