@@ -1,7 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { useContainer } from 'class-validator';
 import { ApiGatewayModule } from './api-gateway/api-gateway.module';
 
 async function bootstrap() {

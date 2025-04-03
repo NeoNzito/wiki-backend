@@ -1,48 +1,41 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Inject } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/create-user.dto";
-import { Public } from "src/auth/decorator/public.decorator";
 import { UpdateUserDTO } from "./dto/update-user.dto";
-import { ClientProxy, MessagePattern } from "@nestjs/microservices";
+import { ClientProxy, MessagePattern, Payload } from "@nestjs/microservices";
 
 
 @Controller("user")
 export class UserController {
     constructor(
         private readonly userService: UserService,
-        private readonly userClient: ClientProxy
+        @Inject("USER_SERVICE") private readonly userClient: ClientProxy
     ) {}
 
     @MessagePattern("create_user")
-    async createUser(user: CreateUserDTO) {
+    async createUser(@Payload() user: CreateUserDTO) {
         const res = await this.userService.createUser(user);
         this.userClient.emit("user.created", res);
         return { message: "User created succesfully" };
     }
 
     @MessagePattern("get_user_by_email")
-    async getUserByEmail(data : { email: string }) {
-        return await this.userService.getOneUserByEmail(data.email);
+    async getUserByEmail(@Payload() email: string) {
+        return await this.userService.getOneUserByEmail(email);
     }
 
-    @Get("/:id")
-    @Public()
-    async getOneUserById(@Param("id") id: string) {
+    @MessagePattern("get_user_by_id")
+    async getOneUserById(@Payload() id: string) {
         return await this.userService.getOneUserById(id);
     }
 
-    @Post("/edit/:id")
-    async editUser(@Param("id") id: string, @Body() body : any) {
-        const { username, password } = body
-        const user : UpdateUserDTO = {
-            username,
-            password
-        }
-        return await this.userService.updateUser(id, user);
+    @MessagePattern("update_user")
+    async updateUser(@Payload() data: { id: string, user: UpdateUserDTO }) {
+        return await this.userService.updateUser(data.id, data.user);
     }
 
-    @Post("/delete/:id")
-    async disableUser(@Param("id") id: string) {
+    @MessagePattern("disable_user")
+    async disableUser(@Payload() id: string) {
         return await this.userService.disableUser(id);
     }
 }

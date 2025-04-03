@@ -1,52 +1,38 @@
-import { Body, Controller, Get, Param, Post, Request, UnauthorizedException } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, Request, UnauthorizedException } from "@nestjs/common";
 import { CreateCommunityDTO } from "./dto/create-community.dto";
 import { CommunityService } from "./community.service";
 import { UpdateCommunityDTO } from "./dto/update-community.dto";
-import { ClientProxy } from "@nestjs/microservices";
+import { ClientProxy, MessagePattern, Payload } from "@nestjs/microservices";
 
 @Controller("community")
 export class CommunityController {
     constructor(
         private readonly communityService: CommunityService,
-        private readonly communityClient: ClientProxy
+        @Inject("COMMUNITY_SERVICE") private readonly communityClient: ClientProxy
     ) {}
 
-    @Post()
-    async createCommunity(@Request() req, @Body() body) {
-        const { title, description } = body;
-        const community : CreateCommunityDTO = {
-            title,
-            description,
-            ownerId: req.user.id
-        }
-
+    @MessagePattern("create_community")
+    async createCommunity(@Payload() community: CreateCommunityDTO) {
         return await this.communityService.createCommunity(community);
     }
 
-    @Get()
-    async getAllCommunities(@Body() body) {
-        const { page, limit } = body;
-        return await this.communityService.getAllCommunities(page, limit);
+    @MessagePattern("get_all_communities")
+    async getAllCommunities(@Payload() data: { page: number, limit: number }) {
+        return await this.communityService.getAllCommunities(data.page, data.limit);
     }
 
-    @Get("/:id")
-    async getOneCommunityById(@Param("id") id: string) {
+    @MessagePattern("get_one_community_by_id")
+    async getOneCommunityById(@Payload() id: string) {
         return this.communityService.getOneCommunityById(id);
     }
 
-    @Post("/update/:id")
-    async updateCommunity(@Param("id") id: string, @Body() body) {
-        const { title, description } = body;
-        const community : UpdateCommunityDTO = {
-            title,
-            description
-        }
-
-        return this.communityService.updateCommunity(id, community);
+    @MessagePattern("update_community")
+    async updateCommunity(@Payload() data: { id: string, community: UpdateCommunityDTO }) {
+        return this.communityService.updateCommunity(data.id, data.community);
     }
 
-    @Post("/delete/:id")
-    async disableCommunity(@Param("id") id) {
+    @MessagePattern("disable_community")
+    async disableCommunity(@Payload() id: string) {
         return this.communityService.disableCommunity(id);
     }
 }
