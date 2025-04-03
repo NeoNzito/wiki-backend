@@ -21,6 +21,9 @@ export class CommunityRepository {
         const skip = (page - 1) * limit;
 
         const communities = await this.prisma.community.findMany({
+            where: {
+                active: true
+            },
             skip: skip,
             take: limit,
         });

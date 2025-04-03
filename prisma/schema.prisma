@@ -56,28 +56,11 @@ model Post {
   community   Community @relation(fields: [communityId], references: [id], name: "PostOwner")
   creatorId   String    @db.ObjectId
   creator     User      @relation(fields: [creatorId], references: [id], name: "PostCreator")
+  content     String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  content     Content[] @relation("ContentOwner")
 
   @@map("posts")
-}
-
-enum ContentType {
-  Text
-  Video
-}
-
-model Content {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  type      ContentType
-  content   String
-  postId    String      @db.ObjectId
-  post      Post        @relation(fields: [postId], references: [id], name: "ContentOwner")
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-
-  @@map("contents")
 }
 
 model Comment {
