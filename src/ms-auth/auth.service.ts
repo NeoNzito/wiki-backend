@@ -1,9 +1,8 @@
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { UserService } from "src/ms-user/user.service";
 import { LoginDTO } from "./dto/login.dto";
-import { ClientProxy } from "@nestjs/microservices";
 import { firstValueFrom } from "rxjs";
+import UserEntity from "src/ms-user/entity/user.entity";
 
 
 const bcrypt = require("bcrypt");
@@ -11,15 +10,10 @@ const bcrypt = require("bcrypt");
 @Injectable()
 export class AuthService {
     constructor(
-        @Inject("USER_SERVICE") private userClient : ClientProxy,
-        private jwtService : JwtService
+        private readonly jwtService : JwtService
     ) {}
 
-    async login(loginData: LoginDTO): Promise<{ access_token: string }> {
-        const user = await firstValueFrom(
-            this.userClient.send("get_user_by_email", { email: loginData.email })
-        );
-        
+    async login(user: UserEntity, loginData: LoginDTO): Promise<{ access_token: string }> {
         if (!user) {
             throw new UnauthorizedException();
         }

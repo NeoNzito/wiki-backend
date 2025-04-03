@@ -22,7 +22,7 @@ export class CommunityRepository {
 
         const communities = await this.prisma.community.findMany({
             skip: skip,
-            take: limit
+            take: limit,
         });
 
         const total = await this.prisma.community.count();

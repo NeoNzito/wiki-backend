@@ -5,9 +5,7 @@ import { CommunityRepository } from "./repository/community.repository";
 import { PostModule } from "./post/post.module";
 
 @Module({
-    imports: [
-        PostModule
-    ],
+    imports: [PostModule],
     controllers: [CommunityController],
     providers: [
         CommunityService, 

@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
-import { AuthModule } from "src/auth/auth.module";
+import { AuthModule } from "src/ms-auth/auth.module";
 import { PrismaModule } from "src/prisma/prisma.module";
 
 @Module({
@@ -51,8 +51,16 @@ import { PrismaModule } from "src/prisma/prisma.module";
               queueOptions: { durable: false },
             },
           },
+          {
+            name: "AUTH_SERVICE",
+            transport: Transport.RMQ,
+            options: {
+              urls: [process.env.RABBITMQ_URL || "amqp://localhost:5672"],
+              queue: "auth_queue",
+              queueOptions: { durable: false },
+            }
+          },
         ]),
-      AuthModule,
       PrismaModule,
     ]
 })
