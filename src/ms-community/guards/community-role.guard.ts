@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { COMMUNITY_RULE_KEY } from "../decorator/community-role.decorator";
+import { COMMUNITY_RULE_KEY } from "../../common/decorator/community-role.decorator";
 import { Request } from "express";
 import { CommunityService } from "src/ms-community/community.service";
-import { AuthenticatedRequest } from "../authenticatedRequest";
+import { AuthenticatedRequest } from "../../common/authenticatedRequest";
 
 @Injectable()
 export class CommunityRoleGuard implements CanActivate {

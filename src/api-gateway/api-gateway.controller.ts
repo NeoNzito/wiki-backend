@@ -5,6 +5,7 @@ import { LoginDTO } from "src/ms-auth/dto/login.dto";
 import { CreateCommunityDTO } from "src/ms-community/dto/create-community.dto";
 import { ApiGatewayService } from "./api-gateway.service";
 import { CommunityRoleGuard } from "src/ms-community/guards/community-role.guard";
+import { CreatePostDTO } from "src/ms-community/post/dto/create-post.dto";
 
 
 @Controller("api")
@@ -99,15 +100,15 @@ export class ApiGatewayController {
     //#endregion
 
     //#region Post
-    @Post()
+    @Post("community/post")
     @UseGuards(CommunityRoleGuard)
-    async createPost() {
-
+    async createPost(@Body() post: CreatePostDTO) {
+        return await this.communityClient.send("create_post", post);
     }
 
-    @Get()
-    async getAllPosts() {
-
+    @Get("community/:id/posts")
+    async getAllPostsFromCommunity(@Param("id") id: string) {
+        return await this.communityClient.send("get_all_posts_from_community", id);
     }
 
     @Get()
