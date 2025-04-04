@@ -1,11 +1,10 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, Request } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, Request, UseGuards } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
-import { title } from "process";
 import { Public } from "src/common/decorator/public.decorator";
 import { LoginDTO } from "src/ms-auth/dto/login.dto";
 import { CreateCommunityDTO } from "src/ms-community/dto/create-community.dto";
-import { UpdateCommunityDTO } from "src/ms-community/dto/update-community.dto";
 import { ApiGatewayService } from "./api-gateway.service";
+import { CommunityRoleGuard } from "src/ms-community/guards/community-role.guard";
 
 
 @Controller("api")
@@ -29,6 +28,7 @@ export class ApiGatewayController {
         return await this.userClient.send("get_user_by_email", data.email);
     }
 
+    @Public()
     @Get("user/:id")
     async getOneUserById(@Param("id") id: string) {
         return await this.userClient.send("get_user_by_id", id);
@@ -99,6 +99,31 @@ export class ApiGatewayController {
     //#endregion
 
     //#region Post
+    @Post()
+    @UseGuards(CommunityRoleGuard)
+    async createPost() {
 
+    }
+
+    @Get()
+    async getAllPosts() {
+
+    }
+
+    @Get()
+    async getOnePostById() {
+
+    }
+
+    @Post()
+    @UseGuards(CommunityRoleGuard)
+    async updatePost() {
+
+    }
+
+    @Post()
+    async deletePost() {
+        
+    }
     //#endregion
 }
