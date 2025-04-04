@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ApiGatewayModule } from './api-gateway/api-gateway.module';
+import { AuthGuard } from './ms-auth/guard/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiGatewayModule);
@@ -16,7 +17,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true
     })
   )
-  app.setGlobalPrefix('api');  
+
+  app.useGlobalGuards();
+  app.setGlobalPrefix('api');
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

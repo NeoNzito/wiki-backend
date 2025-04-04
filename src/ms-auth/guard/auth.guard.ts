@@ -2,8 +2,8 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
-import { IS_PUBLIC_KEY } from "src/ms-auth/decorator/public.decorator";
-import { jwtConstants } from "../constants";
+import { IS_PUBLIC_KEY } from "src/common/decorator/public.decorator";
+import { jwtConstants } from "../jwt/constants";
 
 
 @Injectable()

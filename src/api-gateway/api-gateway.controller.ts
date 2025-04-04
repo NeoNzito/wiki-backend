@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, Request } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { title } from "process";
-import { Public } from "src/ms-auth/decorator/public.decorator";
+import { Public } from "src/common/decorator/public.decorator";
 import { LoginDTO } from "src/ms-auth/dto/login.dto";
 import { CreateCommunityDTO } from "src/ms-community/dto/create-community.dto";
 import { UpdateCommunityDTO } from "src/ms-community/dto/update-community.dto";
@@ -96,5 +96,9 @@ export class ApiGatewayController {
     async getProfile(@Request() req) {
         return await this.authClient.send("get_profile", req);
     }
+    //#endregion
+
+    //#region Post
+
     //#endregion
 }

@@ -32,4 +32,8 @@ export class CommunityService {
     async disableCommunity(id: string) {
         return await this.communityRepository.disableCommunity(id);
     }
+
+    async checkUserAccess(userId: string, communityId: string): Promise<boolean> {
+        /* Implement logic */ return true;
+    }
 }
