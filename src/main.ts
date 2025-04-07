@@ -1,8 +1,8 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ApiGatewayModule } from './api-gateway/api-gateway.module';
-import { AuthGuard } from './ms-auth/guards/auth.guard';
 import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from './api-gateway/guards/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiGatewayModule);

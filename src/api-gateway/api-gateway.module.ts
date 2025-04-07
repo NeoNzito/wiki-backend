@@ -1,7 +1,8 @@
 import { Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
 import { ClientsModule, Transport } from "@nestjs/microservices";
-import { AuthModule } from "src/ms-auth/auth.module";
 import { PrismaModule } from "src/prisma/prisma.module";
+import { jwtConstants } from "./jwt/constants";
 
 @Module({
     imports: [
@@ -62,6 +63,13 @@ import { PrismaModule } from "src/prisma/prisma.module";
           },
         ]),
       PrismaModule,
+      JwtModule.register({
+                  global: true,
+                  secret: jwtConstants.secret,
+                  signOptions: {
+                      expiresIn: jwtConstants.accessExpiresIn
+                  },
+              }),
     ]
 })
 export class ApiGatewayModule {}
