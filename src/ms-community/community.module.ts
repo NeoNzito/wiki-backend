@@ -3,7 +3,7 @@ import { CommunityController } from "./comumunity.controller";
 import { CommunityService } from "./community.service";
 import { CommunityRepository } from "./repository/community.repository";
 import { PostModule } from "./post/post.module";
-import { CommunityRoleGuard } from "./guards/community-role.guard";
+import { CommunityRoleGuard } from "../api-gateway/guards/community-role.guard";
 import { APP_GUARD } from "@nestjs/core";
 import { CommunityGateway } from "./community.gateway";
 

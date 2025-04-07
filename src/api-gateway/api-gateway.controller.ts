@@ -4,8 +4,9 @@ import { Public } from "src/common/decorator/public.decorator";
 import { LoginDTO } from "src/ms-auth/dto/login.dto";
 import { CreateCommunityDTO } from "src/ms-community/dto/create-community.dto";
 import { ApiGatewayService } from "./api-gateway.service";
-import { CommunityRoleGuard } from "src/ms-community/guards/community-role.guard";
+import { CommunityRoleGuard } from "src/api-gateway/guards/community-role.guard";
 import { CreatePostDTO } from "src/ms-community/post/dto/create-post.dto";
+import { RequiresCommunityAccess } from "src/common/decorator/community-role.decorator";
 
 
 @Controller("api")
@@ -51,6 +52,8 @@ export class ApiGatewayController {
     //#endregion
 
     //#region Community
+    @RequiresCommunityAccess()
+    @UseGuards(CommunityRoleGuard)
     @Post("community")
     async createCommunity(@Request() req, @Body() data: { title, description }) {
         const community: CreateCommunityDTO = {
@@ -102,6 +105,7 @@ export class ApiGatewayController {
     //#region Post
     @Post("community/post")
     @UseGuards(CommunityRoleGuard)
+    @RequiresCommunityAccess()
     async createPost(@Body() post: CreatePostDTO) {
         return await this.communityClient.send("create_post", post);
     }
@@ -117,7 +121,6 @@ export class ApiGatewayController {
     }
 
     @Post()
-    @UseGuards(CommunityRoleGuard)
     async updatePost() {
 
     }

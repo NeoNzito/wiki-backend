@@ -34,6 +34,6 @@ export class CommunityService {
     }
 
     async checkUserAccess(userId: string, communityId: string): Promise<boolean> {
-        /* Implement logic */ return true;
+        return await this.communityRepository.checkUserInCommunity(userId, communityId);
     }
 }

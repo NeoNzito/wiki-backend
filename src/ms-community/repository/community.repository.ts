@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateCommunityDTO } from "../dto/create-community.dto";
 import { UpdateCommunityDTO } from "../dto/update-community.dto";
+import { Community } from "@prisma/client";
+
 
 @Injectable()
 export class CommunityRepository {
@@ -17,7 +19,7 @@ export class CommunityRepository {
         })
     }
 
-    async getAllCommunities(page: number = 1, limit: number = 20) {
+    async getAllCommunities(page: number = 1, limit: number = 20): Promise<{ data: Community[], total: number, page: number, totalPages: number }> {
         const skip = (page - 1) * limit;
 
         const communities = await this.prisma.community.findMany({
@@ -38,7 +40,7 @@ export class CommunityRepository {
         }
     }
 
-    async getOneCommunityById(id: string) {
+    async getOneCommunityById(id: string): Promise<Community | null> {
         return await this.prisma.community.findUnique({
             where: {
                 id: id
@@ -46,7 +48,7 @@ export class CommunityRepository {
         });
     }
 
-    async updateCommunity(id: string, community: UpdateCommunityDTO) {
+    async updateCommunity(id: string, community: UpdateCommunityDTO): Promise<Community> {
         return await this.prisma.community.update({
             where: {
                 id: id
@@ -66,5 +68,26 @@ export class CommunityRepository {
                 active: false
             }
         })
+    }
+
+    async checkUserInCommunity(userId: string, communityId: string): Promise<boolean> {
+        const user = await this.prisma.community.findUnique({
+            where: {
+                id: communityId,
+                AND: {
+                    members: {
+                        some: {
+                            userId: userId,
+                        },
+                    },
+                },
+            }
+        });
+
+        if (!user) {
+            return false;
+        }
+
+        return true;
     }
 }

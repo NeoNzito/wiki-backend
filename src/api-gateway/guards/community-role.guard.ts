@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { COMMUNITY_RULE_KEY } from "../../common/decorator/community-role.decorator";
-import { Request } from "express";
 import { CommunityService } from "src/ms-community/community.service";
 import { AuthenticatedRequest } from "../../common/authenticatedRequest";
 
